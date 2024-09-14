@@ -1,0 +1,11 @@
+Model Information:
+* title:	Avatar the last airbender: Uncle Iroh
+* source:	https://sketchfab.com/3d-models/avatar-the-last-airbender-uncle-iroh-3774c85a580c4963922e5597437b26e6
+* author:	ASideOfChidori (https://sketchfab.com/asideofchidori)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Avatar the last airbender: Uncle Iroh" (https://sketchfab.com/3d-models/avatar-the-last-airbender-uncle-iroh-3774c85a580c4963922e5597437b26e6) by ASideOfChidori (https://sketchfab.com/asideofchidori) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
