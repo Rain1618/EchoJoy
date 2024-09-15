@@ -1,0 +1,75 @@
+using System.Collections;
+using UnityEngine;
+using UnityEngine.Networking;
+
+public class SongGenerator : MonoBehaviour
+{
+
+    public AudioSource audioSource;
+
+    public string apiUrl = "http://127.0.0.1:5000/generate_song";
+
+    //REPLACE?
+    public string mood = "happy";
+
+    void Start()
+    {
+        StartCoroutine(GenerateSongForMood(mood));
+    }
+
+    IEnumerator GenerateSongForMood(string mood)
+    {
+        string jsonData = "{\"mood\": \"" + mood + "\"}";
+
+        UnityWebRequest request = new UnityWebRequest(apiUrl, "POST");
+        byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
+        request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+        {
+            Debug.LogError("Error: " + request.error);
+        }
+        else
+        {
+            string responseJson = request.downloadHandler.text;
+            SongResponse songResponse = JsonUtility.FromJson<SongResponse>(responseJson);
+
+            if (!string.IsNullOrEmpty(songResponse.song_url))
+            {
+                Debug.Log("Song URL: " + songResponse.song_url);
+                StartCoroutine(PlaySongFromURL(songResponse.song_url));
+            }
+            else
+            {
+                Debug.LogError("Failed to get song URL.");
+            }
+        }
+    }
+
+    IEnumerator PlaySongFromURL(string url)
+    {
+        UnityWebRequest audioRequest = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.MPEG);
+        yield return audioRequest.SendWebRequest();
+
+        if (audioRequest.result == UnityWebRequest.Result.ConnectionError || audioRequest.result == UnityWebRequest.Result.ProtocolError)
+        {
+            Debug.LogError("Error downloading audio: " + audioRequest.error);
+        }
+        else
+        {
+            AudioClip clip = DownloadHandlerAudioClip.GetContent(audioRequest);
+            audioSource.clip = clip;
+            audioSource.Play();
+        }
+    }
+}
+
+[System.Serializable]
+public class SongResponse
+{
+    public string song_url;
+}
